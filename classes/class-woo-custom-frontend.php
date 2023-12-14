@@ -32,7 +32,7 @@ class WooCustom_Frontend {
  
 	function woo_custom_product_add_on() {
 		$value = isset( $_POST['custom_text_add_on'] ) ? sanitize_text_field( $_POST['custom_text_add_on'] ) : '';
-		echo '<div><label> __( "Custom Text Add-On", "woo-custom" ) <abbr class="required" title="required">*</abbr></label><p><input name="custom_text_add_on" value="' . $value . '"></p></div>';
+		echo '<div><label>'. __( "Custom Text Add-On", "woo-custom" ) . '<abbr class="required" title="required">*</abbr></label><p><input name="custom_text_add_on" value="' . $value . '"></p></div>';
 	}
 
 	function woo_custom_product_add_on_validation( $passed, $product_id, $qty ){
