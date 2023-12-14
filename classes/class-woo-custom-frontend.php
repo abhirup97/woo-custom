@@ -14,11 +14,6 @@ if (!defined('ABSPATH')) {
 
 class WooCustom_Frontend {
 	function __construct(){
-		//enqueue scripts and style for frntend
-		//add_action( 'wp_enqueue_scripts', [ $this, 'frontend_scripts_styles' ] );
-
-
-
 		// Show custom input field above Add to Cart
 		add_action( 'woocommerce_before_add_to_cart_button', [ $this, 'woo_custom_product_add_on' ], 9 );
 		// Throw error if custom input field empty
@@ -37,12 +32,12 @@ class WooCustom_Frontend {
  
 	function woo_custom_product_add_on() {
 		$value = isset( $_POST['custom_text_add_on'] ) ? sanitize_text_field( $_POST['custom_text_add_on'] ) : '';
-		echo '<div><label>Custom Text Add-On <abbr class="required" title="required">*</abbr></label><p><input name="custom_text_add_on" value="' . $value . '"></p></div>';
+		echo '<div><label> __( 'Custom Text Add-On', 'woo-custom' ) <abbr class="required" title="required">*</abbr></label><p><input name="custom_text_add_on" value="' . $value . '"></p></div>';
 	}
 
 	function woo_custom_product_add_on_validation( $passed, $product_id, $qty ){
 		if( isset( $_POST['custom_text_add_on'] ) && sanitize_text_field( $_POST['custom_text_add_on'] ) == '' ) {
-			wc_add_notice( 'Custom Text Add-On is a required field', 'error' );
+			wc_add_notice( __( 'Custom Text Add-On is a required field', 'woo-custom' ), 'error' );
 			$passed = false;
 		}
 		return $passed;
@@ -69,18 +64,5 @@ class WooCustom_Frontend {
 		if ( ! empty( $values['custom_text_add_on'] ) ) {
 			wc_add_order_item_meta( $item_id, 'Custom Text Add-On', $values['custom_text_add_on'], true );
 		}
-	}
- 
-	public function frontend_scripts_styles() {
-		global $WooCustom;
-		$suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
-		//load bootstrap
-		$WooCustom->library->load_bootstrap_style_lib();
-		$WooCustom->library->load_bootstrap_script_lib();
-		wp_enqueue_script( 'woo-script-script', $WooCustom->plugin_url . 'assets/frontend/js/frontend' . $suffix . '.js', array( 'jquery' ), null, false );
-		wp_localize_script('woo-script-script', 'script_data', 
-			array(
-				'ajax_url' => admin_url('admin-ajax.php', 'relative'),
-			));
 	}
 }
